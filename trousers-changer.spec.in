@@ -1,10 +1,5 @@
-%define name trousers-changer
-%define subdir %{?qubes_builder:%{name}/}
-%define _builddir %(pwd)/%{subdir}
-%{!?version: %define version %(cat %{subdir}version)}
-
-Name:		%{name}
-Version:	%{version}
+Name:		trousers-changer
+Version:	@VERSION@
 Release:	1%{?dist}
 Summary:    	tcsd wrapper for portable installations
 Requires:	trousers tpm-tools systemd tpm-extra >= 4.0.0
@@ -12,9 +7,13 @@ Requires(post):	systemd
 Vendor:		Invisible Things Lab
 License:	GPL
 URL:		http://www.qubes-os.org
+Source0:	%{name}-%{version}.tar.gz
 
 %description
 tcsd wrapper for portable installations.
+
+%prep
+%setup -q
 
 %install
 cp -r sbin $RPM_BUILD_ROOT
@@ -35,3 +34,6 @@ systemctl daemon-reload
 if [ "$1" = 0 ]; then
     systemctl daemon-reload
 fi
+
+%changelog
+@CHANGELOG@
