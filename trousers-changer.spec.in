@@ -1,8 +1,8 @@
 Name:		trousers-changer
 Version:	@VERSION@
 Release:	1%{?dist}
-Summary:    	tcsd wrapper for portable installations
-Requires:	trousers tpm-tools systemd tpm-extra >= 4.0.0
+Summary:	TPM service wrapper for portable installations
+Requires:	trousers tpm-tools tpm2-tools systemd tpm-extra >= 4.0.0
 Requires(post):	systemd
 Vendor:		Invisible Things Lab
 License:	GPL
@@ -10,7 +10,12 @@ URL:		http://www.qubes-os.org
 Source0:	%{name}-%{version}.tar.gz
 
 %description
-tcsd wrapper for portable installations.
+Wraps tcsd's systemd service to replace /var/lib/tmp with a symbolic link to
+/var/lib/tmps/TPMID/.  TPMID is read from an NVRAM entry provisioned from the
+outside (should be 20 bytes long).
+
+Can also be used to manage /var/lib/tpm for TPM2 as long as something will
+create files in /var/lib/tpm.
 
 %prep
 %setup -q
@@ -23,6 +28,7 @@ cp -r systemd $RPM_BUILD_ROOT/usr/lib
 
 %files
 /sbin/tpm_id
+/sbin/tpm2_id
 /sbin/trousers_changer_identify
 /sbin/trousers_changer_migrate
 /usr/lib/systemd/system/tcsd.service.d/trousers-changer.conf

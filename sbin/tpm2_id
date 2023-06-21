@@ -1,0 +1,58 @@
+#!/bin/bash
+set -e -o pipefail
+export LC_ALL=C
+
+
+TPM_ID_INDEX="0x7562"
+
+
+usage() {
+    cat <<EOF
+Prints a 20-byte hex string TPM ID followed by a newline.
+
+Usage: tpm_id2 [-i]
+    -i     print the TPM ID NVRAM index
+EOF
+    exit 1
+}
+
+log() {
+    echo "${0##*/}: $1" >&2
+}
+
+hex() {
+    xxd -ps | tr -dc 0-9a-f
+}
+
+getindex() {
+    echo "$TPM_ID_INDEX"
+}
+
+getid() {
+    if ! tpm2_nvreadpublic "$TPM_ID_INDEX" 2>/dev/null |
+           grep -iq "writedefine"; then
+        log "TPM NVRAM area at index $TPM_ID_INDEX is not defined!"
+        log "Hint: did you run 'anti-evil-maid-tpm-setup'?"
+        echo "unknown"
+    else
+        session=$(mktemp)
+        tpm2_startauthsession -S "$session" --policy-session
+        tpm2_policycommandcode -Q -S "$session" TPM2_CC_NV_Read
+        tpm2_nvread "$TPM_ID_INDEX" -P "session:$session" | hex
+        tpm2_flushcontext "$session"
+        rm "$session"
+
+        # add a newline
+        echo
+    fi
+}
+
+
+while getopts i opt; do
+    case "$opt" in
+        i) getindex && exit 0 ;;
+        *) usage ;;
+    esac
+done
+
+getid

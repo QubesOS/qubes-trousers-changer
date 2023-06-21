@@ -16,10 +16,15 @@ tpm_setup() {
 log "identifying TPM"
 
 tpm_id=unknown
+tpm_id_script=tpm2_id
 tpm_setup "$tpm_id"
-tcsd
-trap "killall -w tcsd" EXIT
-if tpm_id_try="$(tpm_id)"; then
+if [ "$(cat /sys/class/tpm/tpm0/tpm_version_major)" -eq 1 ]; then
+    tpm_id_script=tpm_id
+
+    tcsd
+    trap "killall -w tcsd" EXIT
+fi
+if tpm_id_try="$($tpm_id_script)"; then
     tpm_id=$tpm_id_try
     tpm_setup "$tpm_id"
 fi
