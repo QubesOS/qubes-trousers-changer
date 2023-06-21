@@ -24,6 +24,6 @@ if [ -e "$TPM_MIGRATE_DIR" ]; then
 fi
 
 mv "$TPM_DIR" "$TPM_MIGRATE_DIR"
-tcsd_changer_identify
+trousers_changer_identify
 find "$TPM_MIGRATE_DIR" -mindepth 1 -maxdepth 1 -exec mv {} "$TPM_DIR"/ \;
 rmdir "$TPM_MIGRATE_DIR"

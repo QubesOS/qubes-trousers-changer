@@ -23,8 +23,8 @@ cp -r systemd $RPM_BUILD_ROOT/usr/lib
 
 %files
 /sbin/tpm_id
-/sbin/tcsd_changer_identify
-/sbin/tcsd_changer_migrate
+/sbin/trousers_changer_identify
+/sbin/trousers_changer_migrate
 /usr/lib/systemd/system/tcsd.service.d/trousers-changer.conf
 
 %post
