@@ -10,7 +10,7 @@ usage() {
     cat <<EOF
 Prints a 20-byte hex string TPM ID followed by a newline.
 
-Usage: tpm_id2 [-i]
+Usage: tpm2_id [-i]
     -i     print the TPM ID NVRAM index
 EOF
     exit 1
