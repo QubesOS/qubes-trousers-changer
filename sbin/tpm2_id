@@ -29,8 +29,13 @@ getindex() {
 }
 
 getid() {
+    # Do not use `-q` flag of grep.  The flag makes grep exit on finding a match
+    # before reaching EOF.  Closing of grep's input stream can result in
+    # tpm2_nvreadpublic failing to write to its output stream and error, which
+    # then becomes the result of the whole pipe due to the use of
+    # `set -o pipefail` at the top.
     if ! tpm2_nvreadpublic "$TPM_ID_INDEX" 2>/dev/null |
-           grep -iq "writedefine"; then
+           grep -i "writedefine" >/dev/null; then
         log "TPM NVRAM area at index $TPM_ID_INDEX is not defined!"
         log "Hint: did you run 'anti-evil-maid-tpm-setup'?"
         echo "unknown"
