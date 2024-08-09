@@ -8,6 +8,7 @@ Vendor:		Invisible Things Lab
 License:	GPL
 URL:		http://www.qubes-os.org
 Source0:	%{name}-%{version}.tar.gz
+BuildArch: noarch
 
 %description
 Wraps tcsd's systemd service to replace /var/lib/tmp with a symbolic link to
